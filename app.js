@@ -12,7 +12,7 @@ const queue = new Queue('jobs', {
 });
 const bent = require('bent')
 
-const url = 'https://api.pushshift.io/reddit/search?q=petakillsanimals&limit=10&filter=body,id,author,parent_id'
+const url = 'https://api.pushshift.io/reddit/search?q=petakillsanimals.com&limit=10&filter=body,id,author,parent_id'
 const getJSON = bent('json', url)
 const reply = fs.readFileSync('./reply.md', 'utf8');
 
