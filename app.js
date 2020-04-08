@@ -2,7 +2,14 @@ const fs = require('fs');
 const { client, config } = require('./redditClient')
 const limiter = require('./limiter')
 const Queue = require('bee-queue');
-const queue = new Queue('jobs');
+const queue = new Queue('jobs', {
+  redis: {
+    host: process.env.NODE_ENV === 'production' ? 'redis' : '127.0.0.1',
+    port: 6379,
+    db: 0,
+    options: {}
+  },
+});
 const bent = require('bent')
 
 const url = 'https://api.pushshift.io/reddit/search?q=petakillsanimals&limit=10&filter=body,id,author,parent_id'

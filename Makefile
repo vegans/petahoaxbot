@@ -2,6 +2,8 @@ foo:
 	echo "OK"
 
 deploy:
+	git fetch
+	git reset --hard origin/master
 	git pull
 	docker-compose build
 	docker-compose stop

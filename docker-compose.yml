@@ -1,5 +1,9 @@
-bot:
-  build: .
+version: '3.4'
+services:
+  bot:
+    build: .
+    depends_on:
+      - redis
 
-redis:
-  image: redis
+  redis:
+    image: redis
