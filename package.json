@@ -8,6 +8,8 @@
     "dev": "nodemon app.js"
   },
   "dependencies": {
+    "bee-queue": "^1.2.3",
+    "bent": "^7.1.2",
     "bottleneck": "^2.19.5",
     "dotenv": "^8.2.0",
     "humanize-duration": "^3.22.0",

@@ -1,4 +1,4 @@
-> petakillsanimals.com
+> petakillsanimals
 
 ⚠️ This site is run by CORE which are funded by meat industry profits.
 
