@@ -1,0 +1,32 @@
+name: CI
+
+on: [push]
+
+jobs:
+  run:
+    name: Main
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Run linters
+        uses: samuelmeuli/lint-action@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          # Enable linters
+          prettier: true
+          prettier_extensions: ts
+          eslint: true
+          eslint_extensions: ts
+
+      - name: Build project
+        run: yarn build
