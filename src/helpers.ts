@@ -17,3 +17,6 @@ const url =
   'https://api.pushshift.io/reddit/search?q=petakillsanimals.com&limit=10&filter=body,id,author,parent_id';
 
 export const getJSON = bent('json', url);
+
+export const second = 1000;
+export const minute = second * 60;

@@ -1,9 +1,6 @@
 import Bottleneck from 'bottleneck';
 import humanizeDuration from 'humanize-duration';
-import { log, isProduction } from './helpers';
-
-const second = 1000;
-const minute = second * 60;
+import { log, isProduction, minute, second } from './helpers';
 
 export const limiter = new Bottleneck({
   maxConcurrent: 1,

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
 import { client, config } from './redditClient';
 import { limiter } from './limiter';
-import { log, getJSON, isProduction, reply } from './helpers';
+import { log, getJSON, isProduction, reply, minute } from './helpers';
 import { queue } from './queue';
 
 setInterval(async () => {
@@ -14,7 +14,7 @@ setInterval(async () => {
       queue.createJob(comment).setId(comment.id).save();
     }
   });
-}, 1500);
+}, minute);
 
 queue.process(async ({ data, id }) => {
   try {
