@@ -15,4 +15,4 @@ WORKDIR /app
 
 COPY --from=0 /app .
 
-CMD ["yarn", "dist"]
+CMD ["node", "dist/src/app.js"]
