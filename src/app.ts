@@ -1,11 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
-import * as fs from 'fs';
 import { client, config } from './redditClient';
 import { limiter } from './limiter';
-import { log, getJSON, isProduction } from './helpers';
+import { log, getJSON, isProduction, reply } from './helpers';
 import { queue } from './queue';
-
-const reply = fs.readFileSync('./reply.md', 'utf8');
 
 setInterval(async () => {
   const { data } = await getJSON();
@@ -19,8 +16,7 @@ setInterval(async () => {
   });
 }, 1500);
 
-queue.process(async (job) => {
-  const { data, id } = job;
+queue.process(async ({ data, id }) => {
   try {
     // @ts-ignore
     const comment = await client.getComment(id).fetch();
@@ -48,10 +44,10 @@ queue.process(async (job) => {
       await limiter.schedule({ id }, func, { name: data.author });
     }
   } catch (error) {
-    log(job.id, error.message);
+    log(id, error.message);
     return error.message;
   }
-  return job.id;
+  return id;
 });
 
 log('app', `Listening for comments... NODE_ENV: ${process.env.NODE_ENV}`);

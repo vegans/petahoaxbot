@@ -1,4 +1,10 @@
 import * as bent from 'bent';
+import * as fs from 'fs';
+
+const message = fs.readFileSync('./markdown/reply.md', 'utf8');
+const footer = fs.readFileSync('./markdown/footer.md', 'utf8');
+
+export const reply = `${message}\n${footer}`;
 
 export const isProduction = process.env.NODE_ENV === 'production';
 
