@@ -4,6 +4,8 @@ import { limiter } from './limiter';
 import { log, getJSON, isProduction, reply, minute } from './helpers';
 import { queue } from './queue';
 
+require('mdlog/override');
+
 setInterval(async () => {
   const { data } = await getJSON();
   data.forEach((comment) => {
@@ -50,4 +52,7 @@ queue.process(async ({ data, id }) => {
   return id;
 });
 
-log('app', `Listening for comments... NODE_ENV: ${process.env.NODE_ENV}`);
+log('app', `Listening for comments..`);
+log('app', `NODE_ENV: ${process.env.NODE_ENV}`);
+log('app', `Loaded message:`);
+console.log(reply);
