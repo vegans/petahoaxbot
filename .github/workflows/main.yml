@@ -30,3 +30,9 @@ jobs:
 
       - name: Build project
         run: yarn build
+      
+      - name: SSH trigger
+        env:
+          REF: ${{ github.ref }}
+        run: echo "$REF"
+        # if: 
