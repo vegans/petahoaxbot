@@ -1,3 +1,5 @@
+![Test status][tests]
+<br />
 <p align="center">
   <h3 align="center">petahoaxbot</h3>
 
@@ -9,3 +11,5 @@
 </p>
 
 ![example](.github/example.png)
+
+[tests]: https://github.com/vegans/petahoaxbot/workflows/CI/badge.svg
