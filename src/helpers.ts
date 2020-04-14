@@ -1,11 +1,15 @@
 import * as bent from 'bent';
 import { keys } from './watcher';
+import * as colors from 'colors/safe';
 
 export const isProduction = process.env.NODE_ENV === 'production';
 
 export const log = (id: string, comment: string) => {
-  const date = new Date();
-  console.log(`${date.toLocaleTimeString('sv-SE')} [${id}] ${comment}`);
+  const date = colors.green(
+    new Date().toISOString().slice(0, 19).replace('T', ' '),
+  );
+  id = colors.yellow(id);
+  console.log(`${date} [${id}] ${comment}`);
 };
 
 const keysString = keys.join('|');

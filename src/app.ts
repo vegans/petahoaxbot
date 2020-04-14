@@ -4,8 +4,9 @@ import { limiter } from './limiter';
 import { log, getComments, isProduction, minute } from './helpers';
 import { queue } from './queue';
 import { keys, watchers } from './watcher';
+import * as mdlogBuilder from 'mdlog';
 
-require('mdlog/override');
+const mdlog = mdlogBuilder();
 
 setInterval(async () => {
   const { data } = await getComments();
@@ -46,6 +47,6 @@ log('app', `Loaded keys: ${Object.keys(watchers).join(', ')}`);
 if (!isProduction) {
   Object.entries(watchers).forEach(([key, value]) => {
     log('dev', `Output for ${key}:`);
-    console.log(value);
+    mdlog(value);
   });
 }
