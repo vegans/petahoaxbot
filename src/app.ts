@@ -1,7 +1,15 @@
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
 import { client, config } from './redditClient';
 import { limiter } from './limiter';
-import { log, getJSON, isProduction, reply, minute } from './helpers';
+import {
+  log,
+  getJSON,
+  isProduction,
+  reply,
+  minute,
+  hasAlreadyReplied,
+  isInParent,
+} from './helpers';
 import { queue } from './queue';
 
 require('mdlog/override');
@@ -20,22 +28,10 @@ setInterval(async () => {
 
 queue.process(async ({ data, id }) => {
   try {
-    // @ts-ignore
-    const comment = await client.getComment(id).fetch();
-    const alreadyReplied = !!comment.replies
-      .map((r) => r.author.name)
-      .find((r) => r === config.username);
+    const alreadyReplied = await hasAlreadyReplied(id);
     let inParent = false;
     if (!alreadyReplied && data.parent_id) {
-      try {
-        // @ts-ignore
-        const parent = await (await client.getComment(data.parent_id)).fetch();
-        if (parent.author.name === config.username) {
-          inParent = true;
-        }
-      } catch (error) {
-        inParent = true;
-      }
+      inParent = await isInParent(data.parent_id);
     }
 
     if (!alreadyReplied && !inParent) {
@@ -43,7 +39,7 @@ queue.process(async ({ data, id }) => {
         ? () => client.getComment(data.id).reply(reply)
         : () => log(data.id, 'Debug resolve');
       // @ts-ignore
-      await limiter.schedule({ id }, func, { name: data.author });
+      await limiter.schedule({ id }, func);
     }
   } catch (error) {
     log(id, error.message);
