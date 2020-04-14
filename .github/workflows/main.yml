@@ -39,4 +39,4 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          script: cd /home/github/petahoaxbot && make deploy && docker-compose logs -f bot
+          script: cd /home/github/petahoaxbot && make deploy && sleep 10 && docker-compose logs bot
