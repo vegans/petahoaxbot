@@ -48,6 +48,12 @@ queue.process(async ({ data, id }) => {
   return id;
 });
 
-log('app', `Listening for comments..`);
 log('app', `NODE_ENV: ${process.env.NODE_ENV}`);
+log('app', `Listening for comments..`);
 log('app', `Loaded keys: ${Object.keys(watchers).join(', ')}`);
+if (!isProduction) {
+  Object.entries(watchers).forEach(([key, value]) => {
+    log('dev', `Output for ${key}:`);
+    console.log(value);
+  });
+}

@@ -3,26 +3,36 @@ import * as fs from 'fs';
 import * as fm from 'front-matter';
 import { config, client } from './redditClient';
 
-const footer = fs.readFileSync('./markdown/footer.md', 'utf8');
-
-export const watchers = {};
-fs.readdirSync('./markdown')
-  .filter((file) => file !== 'footer.md')
-  .forEach((file) => {
-    const data = fs.readFileSync('./markdown/' + file, 'utf8');
-    const content = fm(data);
-    const term = content.attributes?.['term'];
-    let body = `${content.body}\n${footer}`;
-    body = body.replace('{term}', term).replace('{file}', file);
-    watchers[term] = body;
-  });
-
 export const isProduction = process.env.NODE_ENV === 'production';
 
 export const log = (id: string, comment: string) => {
   const date = new Date();
   console.log(`${date.toLocaleTimeString('sv-SE')} [${id}] ${comment}`);
 };
+
+const footer = fs.readFileSync('./markdown/_footer.md', 'utf8');
+
+export const watchers = {};
+fs.readdirSync('./markdown')
+  .filter((file) => !file.startsWith('_'))
+  .forEach((file) => {
+    const data = fs.readFileSync('./markdown/' + file, 'utf8');
+    const content = fm(data);
+    let terms = content.attributes?.['term'];
+    terms = Array.isArray(terms) ? terms : [terms];
+    terms.forEach((term) => {
+      let body = `${content.body}\n${footer}`;
+      const by =
+        content.attributes?.['by'] && content.attributes?.['by_url']
+          ? `[Read more about ${content.attributes?.['by']}](${content.attributes?.['by_url']}) |\n`
+          : '';
+      body = body
+        .replace('{term}', term)
+        .replace('{file}', file)
+        .replace('{by-footer}\n', by);
+      watchers[term] = body;
+    });
+  });
 
 const keys = Object.keys(watchers).join('|');
 const url = `https://api.pushshift.io/reddit/search?q=${keys}&limit=10&filter=body,id,author,parent_id`;
