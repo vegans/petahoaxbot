@@ -3,30 +3,30 @@ import { client, config } from './redditClient';
 import { limiter } from './limiter';
 import {
   log,
-  getJSON,
+  getComments,
   isProduction,
-  reply,
   minute,
   hasAlreadyReplied,
   isInParent,
+  watchers,
 } from './helpers';
 import { queue } from './queue';
 
 require('mdlog/override');
 
 setInterval(async () => {
-  const { data } = await getJSON();
+  const { data } = await getComments();
   data.forEach((comment) => {
-    if (
-      comment.body.includes('petakillsanimals') &&
-      comment.author !== config.username
-    ) {
+    if (comment.author !== config.username) {
       queue.createJob(comment).setId(comment.id).save();
     }
   });
 }, minute);
 
 queue.process(async ({ data, id }) => {
+  const keys = Object.keys(watchers);
+  const key = keys.find((_key) => data.body.includes(_key));
+  const reply = watchers[key];
   try {
     const alreadyReplied = await hasAlreadyReplied(id);
     let inParent = false;
@@ -50,5 +50,4 @@ queue.process(async ({ data, id }) => {
 
 log('app', `Listening for comments..`);
 log('app', `NODE_ENV: ${process.env.NODE_ENV}`);
-log('app', `Loaded message:`);
-console.log(reply);
+log('app', `Loaded keys: ${Object.keys(watchers).join(', ')}`);
