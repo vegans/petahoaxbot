@@ -11,7 +11,7 @@
     "prebuild": "rimraf ./dist",
     "lint": "eslint . --ext ts",
     "redis": "docker rm petaredis; docker run --name petaredis -p 6379:6379 redis",
-    "preview": "ts-node preview.ts"
+    "generate": "ts-node src/generate.ts"
   },
   "dependencies": {
     "bee-queue": "^1.2.3",
