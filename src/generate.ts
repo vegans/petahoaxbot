@@ -9,9 +9,11 @@ Object.entries(watchers).forEach(([key, value]) => {
   comment =
     comment +
     `
-### ${key}
-
-${value}`;
+<details>
+  <summary>${key}</summary>
+  
+  ${value}
+</details>`;
 });
 
 console.log(comment);
