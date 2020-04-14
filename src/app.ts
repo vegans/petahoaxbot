@@ -1,16 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
-import { client, config } from './redditClient';
+import { client, config, hasAlreadyReplied, isInParent } from './redditClient';
 import { limiter } from './limiter';
-import {
-  log,
-  getComments,
-  isProduction,
-  minute,
-  hasAlreadyReplied,
-  isInParent,
-  watchers,
-} from './helpers';
+import { log, getComments, isProduction, minute } from './helpers';
 import { queue } from './queue';
+import { keys, watchers } from './watcher';
 
 require('mdlog/override');
 
@@ -24,7 +17,6 @@ setInterval(async () => {
 }, minute);
 
 queue.process(async ({ data, id }) => {
-  const keys = Object.keys(watchers);
   const key = keys.find((_key) => data.body.includes(_key));
   const reply = watchers[key];
   try {

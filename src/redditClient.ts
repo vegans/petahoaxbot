@@ -10,3 +10,29 @@ export const config = {
 };
 
 export const client = new Snoowrap(config);
+
+export const hasAlreadyReplied = (id): Promise<boolean> =>
+  new Promise((resolve) => {
+    client
+      .getComment(id)
+      .expandReplies()
+      .then(({ replies }) => {
+        const result = !!replies
+          .map((r) => r.author.name)
+          .find((r) => r === config.username);
+        resolve(result);
+      });
+  });
+
+export const isInParent = (parentId): Promise<boolean> =>
+  new Promise((resolve) => {
+    client
+      .getComment(parentId)
+      .fetch()
+      .then((parent) => {
+        if (parent.author.name === config.username) {
+          resolve(true);
+        }
+      })
+      .finally(() => resolve(false));
+  });
