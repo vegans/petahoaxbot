@@ -3,25 +3,33 @@ import * as fm from 'front-matter';
 
 const footer = fs.readFileSync('./markdown/_footer.md', 'utf8');
 
+interface Attributes {
+  term: string | string[];
+  by?: string;
+  byUrl?: string;
+}
+
 export const watchers = {};
 fs.readdirSync('./markdown')
   .filter((file) => !file.startsWith('_'))
   .forEach((file) => {
     const data = fs.readFileSync('./markdown/' + file, 'utf8');
-    const content = fm(data);
-    let terms = content.attributes?.['term'];
-    terms = Array.isArray(terms) ? terms : [terms];
+    const { attributes, body }: { attributes: Attributes; body: string } = fm(
+      data,
+    );
+    const terms = Array.isArray(attributes.term)
+      ? attributes.term
+      : [attributes.term];
     terms.forEach((term) => {
-      let body = `${content.body}\n${footer}`;
-      const by =
-        content.attributes?.['by'] && content.attributes?.['by_url']
-          ? `[Read more about ${content.attributes?.['by']}](${content.attributes?.['by_url']}) |\n`
-          : '';
-      body = body
+      let output = `${body}\n${footer}`;
+      const { by, byUrl } = attributes;
+      const byString =
+        by && byUrl ? `[Read more about ${by}](${byUrl}) |\n` : '';
+      output = output
         .replace('{term}', term)
         .replace('{file}', file)
-        .replace('{by-footer}\n', by);
-      watchers[term] = body;
+        .replace('{by-footer}\n', byString);
+      watchers[term] = output;
     });
   });
 
