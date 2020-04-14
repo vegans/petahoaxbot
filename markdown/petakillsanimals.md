@@ -1,5 +1,7 @@
 ---
 term: petakillsanimals.com
+by: CORE
+by_url: https://www.sourcewatch.org/index.php?title=Center_for_Consumer_Freedom
 ---
 
 > {term}
