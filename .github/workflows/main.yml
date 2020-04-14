@@ -32,11 +32,11 @@ jobs:
         run: yarn build
       
       - name: SSH deploy
-        # if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master'
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          script: cd /home/github/petahoaxbot && ls -al . # make deploy && docker-compose logs -f bot
+          script: cd /home/github/petahoaxbot && make deploy && docker-compose logs -f bot
