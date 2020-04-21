@@ -31,9 +31,9 @@ jobs:
       - name: Build project
         run: yarn build
 
-  build:
+  publish:
     needs: test
-    name: Deploy
+    name: Publish
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     steps:
@@ -46,7 +46,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
   deploy:
-    needs: test
+    needs: publish
     name: Deploy
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'

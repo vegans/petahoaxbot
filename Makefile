@@ -5,7 +5,7 @@ deploy:
 	git fetch
 	git reset --hard origin/master
 	git pull
-	docker-compose build
+	docker-compose pull
 	docker-compose stop
 	docker-compose up -d
 
