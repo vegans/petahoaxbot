@@ -13,3 +13,16 @@
 ![example](.github/example.png)
 
 [tests]: https://github.com/vegans/petahoaxbot/workflows/CI/badge.svg
+
+### Kubernetes
+
+Create `kubeconfig.yml`
+
+#### Deploy
+
+`yarn kc apply -f kube.yml`
+
+#### Create secrets from .env file
+
+`yarn kc create secret generic petahoaxbot --from-env-file=.env`
+

@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: petahoaxbot
+  labels:
+    app: petahoaxbot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: petahoaxbot
+  template:
+    metadata:
+      labels:
+        app: petahoaxbot
+    spec:
+      containers:
+      - image: benjick/petahoaxbot
+        name: petahoaxbot
+        envFrom:
+          - secretRef:
+              name: petahoaxbot
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  labels:
+    run: redis
+spec:
+  type: NodePort
+  ports:
+  - port: 6379
+    protocol: TCP
+    name: redis
+  selector:
+    run: redis
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+spec:
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - image: redis
+        name: redis
+        resources: {}
+      restartPolicy: Always

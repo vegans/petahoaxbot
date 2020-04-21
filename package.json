@@ -11,7 +11,8 @@
     "prebuild": "rimraf ./dist",
     "lint": "eslint . --ext ts",
     "redis": "docker rm petaredis; docker run --name petaredis -p 6379:6379 redis",
-    "generate": "ts-node src/generate.ts"
+    "generate": "ts-node src/generate.ts",
+    "kc": "kubectl --kubeconfig=\"kubeconfig.yml\""
   },
   "dependencies": {
     "bee-queue": "^1.2.3",
