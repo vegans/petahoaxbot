@@ -2,6 +2,8 @@ version: '3.4'
 services:
   bot:
     image: benjick/petahoaxbot
+    env_file:
+      - ./.env
     depends_on:
       - redis
 
