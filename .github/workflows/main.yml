@@ -30,7 +30,21 @@ jobs:
 
       - name: Build project
         run: yarn build
-    
+
+  build:
+    needs: test
+    name: Deploy
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+    - uses: actions/checkout@master
+    - name: Publish to Registry
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: benjick/petahoaxbot
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
   deploy:
     needs: test
     name: Deploy
